@@ -14,62 +14,95 @@
 	onMount(async () => {
 	  data = await d3.csv('/median_prices.csv');
 	  geoJson = await d3.json('/us-states.json');
-	  dateRange = data.columns.slice(5); // Extract the date range
+	  dateRange = data.columns.slice(8); // Extract the date range
 	  selectedDate = dateRange[0]; // Default to the first date
 	  drawMap();
 	  createSlider();
 	});
   
 	function drawMap() {
-	  const svg = d3
-		.select('#map')
-		.attr('width', width)
-		.attr('height', height);
-  
-	  const projection = d3
-		.geoAlbersUsa()
-		.scale(1800) // Adjusted for expanded map
-		.translate([width / 2, height / 2]);
-  
-	  const path = d3.geoPath().projection(projection);
-  
-	  const colorScale = d3.scaleThreshold()
-	  	.domain([0, 100000, 300000, 500000, 750000, 1000000]) // Include $1,000,000
-  		.range(['#f7fbff', '#deebf7', '#c6dbef', '#9ecae1', '#6baed6', '#084c8d']); // Use a moderately dark blue for $1,000,000
+  const svg = d3
+    .select('#map')
+    .attr('width', width)
+    .attr('height', height);
+
+  const projection = d3
+    .geoAlbersUsa()
+    .scale(1800) // Adjusted for expanded map
+    .translate([width / 2, height / 2]);
+
+  const path = d3.geoPath().projection(projection);
+
+  geoJson.features.forEach(feature => {
+    const stateData = data.find(d => d.RegionName === feature.properties.NAME);
+    feature.properties.median_price = stateData ? Math.round(+stateData[selectedDate]) : null;
+  });
+
+  svg
+    .selectAll('path')
+    .data(geoJson.features)
+    .join('path')
+    .attr('d', path)
+    .attr('fill', d => d.properties.median_price !== null ? colorScale(d.properties.median_price) : '#ccc')
+    .attr('stroke', '#333')
+    .attr('stroke-width', 0.5)
+    .on('mouseover', function (event, d) {
+      // Highlight the state
+      d3.select(this)
+        .transition()
+        .duration(200)
+        .attr('fill', '#ffcc00') // Change to a highlight color
+        .attr('stroke-width', 2); // Thicker border
+
+      // Show tooltip
+      if (d.properties.median_price !== null) {
+        const formattedPrice = d.properties.median_price.toLocaleString();
+        d3.select('#tooltip')
+          .style('opacity', 1)
+          .html(`${d.properties.NAME}: $${formattedPrice}`)
+          .style('left', `${event.pageX + 10}px`)
+          .style('top', `${event.pageY + 10}px`);
+      }
+    })
+    .on('mouseover', function (event, d) {
+  if (d.properties.median_price !== null) {
+    // Brighten the current color slightly
+    const currentColor = d3.select(this).attr('fill');
+    const brighterColor = d3.color(currentColor).brighter(0.5);
+
+    d3.select(this)
+      .transition()
+      .duration(200)
+      .attr('fill', brighterColor) // Brighten the current color
+      .attr('stroke-width', 4); // Thicker border
+
+    // Show tooltip
+    const formattedPrice = d.properties.median_price.toLocaleString();
+    d3.select('#tooltip')
+      .style('opacity', 1)
+      .html(`${d.properties.NAME}: $${formattedPrice}`)
+      .style('left', `${event.pageX + 10}px`)
+      .style('top', `${event.pageY + 10}px`);
+  }
+})
+.on('mouseout', function (event, d) {
+      // Reset to the original color
+      d3.select(this)
+        .transition()
+        .duration(200)
+        .attr('fill', d => d.properties.median_price !== null ? colorScale(d.properties.median_price) : '#ccc')
+        .attr('stroke-width', 0.5);
+
+  // Hide tooltip
+  d3.select('#tooltip').style('opacity', 0);
+});
 
 
+  addLegend(svg, colorScale);
+}
+
   
-	  geoJson.features.forEach(feature => {
-		const stateData = data.find(d => d.RegionName === feature.properties.NAME);
-		feature.properties.median_price = stateData ? Math.round(+stateData[selectedDate]) : null;
-	  });
-  
-	  svg
-		.selectAll('path')
-		.data(geoJson.features)
-		.join('path')
-		.attr('d', path)
-		.attr('fill', d => d.properties.median_price !== null ? colorScale(d.properties.median_price) : '#ccc')
-		.attr('stroke', '#333')
-		.attr('stroke-width', 0.5)
-		.on('mouseover', (event, d) => {
-		  if (d.properties.median_price !== null) {
-			const formattedPrice = d.properties.median_price.toLocaleString();
-			d3.select('#tooltip')
-			  .style('opacity', 1)
-			  .html(`${d.properties.NAME}: $${formattedPrice}`)
-			  .style('left', `${event.pageX + 10}px`)
-			  .style('top', `${event.pageY + 10}px`);
-		  }
-		})
-		.on('mouseout', () => {
-		  d3.select('#tooltip').style('opacity', 0);
-		});
-  
-	  addLegend(svg, colorScale);
-	}
-  
-	function createSlider() {
+function createSlider() {
   const slider = d3.select('#slider');
   slider.append('h3').text('Select Timeline (Year)').style('font-size', '20px').style('margin-bottom', '10px');
 
@@ -130,10 +163,10 @@ function addLegend(svg, colorScale) {
   gradient.selectAll('stop')
     .data([
       { offset: '0%', color: '#f7fbff' },
-      { offset: '20%', color: '#deebf7' },
-      { offset: '40%', color: '#c6dbef' },
-      { offset: '60%', color: '#9ecae1' },
-      { offset: '80%', color: '#6baed6' },
+      { offset: '12%', color: '#deebf7' },
+      { offset: '30%', color: '#c6dbef' },
+      { offset: '45%', color: '#9ecae1' },
+      { offset: '66.6%', color: '#6baed6' },
       { offset: '100%', color: '#041e42' }, // Much darker blue for $1,000,000
     ])
     .enter()
@@ -157,7 +190,7 @@ function addLegend(svg, colorScale) {
 
 <div style="text-align: center; margin-bottom: 20px;">
 	<h1 style="font-size: 28px; font-weight: bold;">
-		U.S Housing Market Insights: Median Prices by State from 2000 to 2024
+		U.S Housing Market Insights: Median Prices by State from January 2000 to October 2024
 	</h1>
 </div>
 
@@ -165,6 +198,24 @@ function addLegend(svg, colorScale) {
   <div id="slider" style="margin: 30px;"></div>
   <svg id="map"></svg>
   <div id="tooltip"></div>
+
+  <!-- Add your description below the visualization -->
+<div style="
+margin-top: 20px; 
+padding: 10px; 
+line-height: 1.5; 
+max-width: 800px; 
+margin-left: auto; 
+margin-right: auto; 
+text-align: justify; 
+font-size: 20px; 
+color: #333; 
+text-indent: 40px;">
+<p>
+<strong>Insightful Visualization:</strong> Explore the evolution of U.S. housing market trends with this interactive visualization. Seamlessly hover over each state to reveal its median home price for the selected year. Navigate through two decades of data using the timeline slider and uncover regional trends. The dynamic color gradient highlights price variations, with deeper hues signifying higher housing values, offering a clear, data-driven perspective on the market.
+</p>
+</div>
+
   
   <style>
 	#map {

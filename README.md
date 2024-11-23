@@ -1,107 +1,38 @@
-# This repo is no longer maintained. Consider using `npm init vite` and selecting the `svelte` option or — if you want a full-fledged app framework — use [SvelteKit](https://kit.svelte.dev), the official application framework for Svelte.
+Description of the Dataset and Visualization:
 
----
+Dataset Overview:
+This visualization is based on the Median Housing Price Dataset spanning from 2000 to 2024. The dataset provides insights into the housing market trends across all U.S. states, showing how median home prices have evolved over the years. Each state is represented with its median housing price for the selected year, giving users a comprehensive look at geographic disparities and trends in home affordability.
 
-# svelte app
+Purpose of the Visualization:
+The purpose of this interactive map is to allow users to:
 
-This is a project template for [Svelte](https://svelte.dev) apps. It lives at https://github.com/sveltejs/template.
+1. Explore Housing Prices by State: By hovering over a state, users can view its name and median housing price for the selected year.
+2. Analyze Trends Over Time: Using the timeline slider, users can navigate through the years from 2000 to 2024 to see how housing prices have changed over time.
+3. Understand Geographic Differences: The color scale provides an immediate visual representation of the range of housing prices, with darker colors representing higher prices.
 
-To create a new project based on this template using [degit](https://github.com/Rich-Harris/degit):
+How to Use the Visualization:
+1. Hover Over States: Move your cursor over any state to see the specific median housing price for that state. The information is displayed in a tooltip that pops up dynamically.
+2. Use the Timeline Slider: Adjust the slider at the top to select a specific year. The map will update to reflect the median housing prices for the chosen year.
+3. Interpret the Legend: Refer to the legend at the bottom of the map to understand the color coding:
+- Lighter colors represent lower housing prices.
+- Darker colors represent higher housing prices.
+- The range starts at $0 and goes up to $1,000,000.
 
-```bash
-npx degit sveltejs/template svelte-app
-cd svelte-app
-```
+Expectations from the Visualization:
+1. Accurate Housing Price Representation:
+- Prices are displayed in real-time based on the selected year, ensuring users get up-to-date insights within the dataset's range.
+2. Ease of Interaction:
+- The map is highly interactive, allowing users to navigate effortlessly between states and years to find the information they need.
+3. Informative Insights:
+- Users can identify patterns, such as which regions tend to have consistently higher housing prices (e.g., California, New York) or observe price growth in developing areas.
 
-*Note that you will need to have [Node.js](https://nodejs.org) installed.*
+Key Takeaways:
+- This visualization highlights the disparity in housing prices across the U.S., showing which states have more affordable housing and which are experiencing significant growth in home values.
+- By exploring the data over time, users can understand how external factors such as the 2008 housing crash or recent inflationary trends have impacted the housing market.
 
+Potential Applications of the Insights:
+- Buyers and Investors: Use the map to identify states with affordable or rapidly appreciating housing markets.
+- Policy Makers: Understand which areas may need affordable housing policies.
+- Researchers and Economists: Analyze the long-term impact of economic events on housing markets.
 
-## Get started
-
-Install the dependencies...
-
-```bash
-cd svelte-app
-npm install
-```
-
-...then start [Rollup](https://rollupjs.org):
-
-```bash
-npm run dev
-```
-
-Navigate to [localhost:8080](http://localhost:8080). You should see your app running. Edit a component file in `src`, save it, and reload the page to see your changes.
-
-By default, the server will only respond to requests from localhost. To allow connections from other computers, edit the `sirv` commands in package.json to include the option `--host 0.0.0.0`.
-
-If you're using [Visual Studio Code](https://code.visualstudio.com/) we recommend installing the official extension [Svelte for VS Code](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode). If you are using other editors you may need to install a plugin in order to get syntax highlighting and intellisense.
-
-## Building and running in production mode
-
-To create an optimised version of the app:
-
-```bash
-npm run build
-```
-
-You can run the newly built app with `npm run start`. This uses [sirv](https://github.com/lukeed/sirv), which is included in your package.json's `dependencies` so that the app will work when you deploy to platforms like [Heroku](https://heroku.com).
-
-
-## Single-page app mode
-
-By default, sirv will only respond to requests that match files in `public`. This is to maximise compatibility with static fileservers, allowing you to deploy your app anywhere.
-
-If you're building a single-page app (SPA) with multiple routes, sirv needs to be able to respond to requests for *any* path. You can make it so by editing the `"start"` command in package.json:
-
-```js
-"start": "sirv public --single"
-```
-
-## Using TypeScript
-
-This template comes with a script to set up a TypeScript development environment, you can run it immediately after cloning the template with:
-
-```bash
-node scripts/setupTypeScript.js
-```
-
-Or remove the script via:
-
-```bash
-rm scripts/setupTypeScript.js
-```
-
-If you want to use `baseUrl` or `path` aliases within your `tsconfig`, you need to set up `@rollup/plugin-alias` to tell Rollup to resolve the aliases. For more info, see [this StackOverflow question](https://stackoverflow.com/questions/63427935/setup-tsconfig-path-in-svelte).
-
-## Deploying to the web
-
-### With [Vercel](https://vercel.com)
-
-Install `vercel` if you haven't already:
-
-```bash
-npm install -g vercel
-```
-
-Then, from within your project folder:
-
-```bash
-cd public
-vercel deploy --name my-project
-```
-
-### With [surge](https://surge.sh/)
-
-Install `surge` if you haven't already:
-
-```bash
-npm install -g surge
-```
-
-Then, from within your project folder:
-
-```bash
-npm run build
-surge public my-project.surge.sh
-```
+This interactive map is designed to be a simple yet powerful tool for anyone interested in exploring the U.S. housing market. Whether you’re a homebuyer, an investor, or just curious, this visualization provides a clear and intuitive way to engage with the data.

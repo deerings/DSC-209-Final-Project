@@ -21024,33 +21024,57 @@ var app = (function () {
     	let svg;
     	let t3;
     	let div2;
+    	let t4;
+    	let div3;
+    	let p;
+    	let strong;
+    	let t6;
 
     	const block = {
     		c: function create() {
     			div0 = element("div");
     			h1 = element("h1");
-    			h1.textContent = "U.S Housing Market Insights: Median Prices by State from 2000 to 2024";
+    			h1.textContent = "U.S Housing Market Insights: Median Prices by State from January 2000 to October 2024";
     			t1 = space();
     			div1 = element("div");
     			t2 = space();
     			svg = svg_element("svg");
     			t3 = space();
     			div2 = element("div");
+    			t4 = space();
+    			div3 = element("div");
+    			p = element("p");
+    			strong = element("strong");
+    			strong.textContent = "Insightful Visualization:";
+    			t6 = text$1(" Explore the evolution of U.S. housing market trends with this interactive visualization. Seamlessly hover over each state to reveal its median home price for the selected year. Navigate through two decades of data using the timeline slider and uncover regional trends. The dynamic color gradient highlights price variations, with deeper hues signifying higher housing values, offering a clear, data-driven perspective on the market.");
     			set_style(h1, "font-size", "28px");
     			set_style(h1, "font-weight", "bold");
-    			add_location(h1, file, 158, 1, 4978);
+    			add_location(h1, file, 191, 1, 6025);
     			set_style(div0, "text-align", "center");
     			set_style(div0, "margin-bottom", "20px");
-    			add_location(div0, file, 157, 0, 4922);
+    			add_location(div0, file, 190, 0, 5969);
     			attr_dev(div1, "id", "slider");
     			set_style(div1, "margin", "30px");
-    			add_location(div1, file, 164, 2, 5119);
+    			add_location(div1, file, 197, 2, 6182);
     			attr_dev(svg, "id", "map");
     			attr_dev(svg, "class", "svelte-ed4w7q");
-    			add_location(svg, file, 165, 2, 5167);
+    			add_location(svg, file, 198, 2, 6230);
     			attr_dev(div2, "id", "tooltip");
     			attr_dev(div2, "class", "svelte-ed4w7q");
-    			add_location(div2, file, 166, 2, 5190);
+    			add_location(div2, file, 199, 2, 6253);
+    			add_location(strong, file, 214, 0, 6541);
+    			add_location(p, file, 213, 0, 6537);
+    			set_style(div3, "margin-top", "20px");
+    			set_style(div3, "padding", "10px");
+    			set_style(div3, "line-height", "1.5");
+    			set_style(div3, "max-width", "800px");
+    			set_style(div3, "margin-left", "auto");
+    			set_style(div3, "margin-right", "auto");
+    			set_style(div3, "text-align", "justify");
+    			set_style(div3, "font-size", "20px");
+    			set_style(div3, "color", "#333");
+    			set_style(div3, "text-indent", "40px");
+    			add_location(div3, file, 202, 0, 6335);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -21064,6 +21088,11 @@ var app = (function () {
     			insert_dev(target, svg, anchor);
     			insert_dev(target, t3, anchor);
     			insert_dev(target, div2, anchor);
+    			insert_dev(target, t4, anchor);
+    			insert_dev(target, div3, anchor);
+    			append_dev(div3, p);
+    			append_dev(p, strong);
+    			append_dev(p, t6);
     		},
     		p: noop$4,
     		i: noop$4,
@@ -21076,6 +21105,8 @@ var app = (function () {
     			if (detaching) detach_dev(svg);
     			if (detaching) detach_dev(t3);
     			if (detaching) detach_dev(div2);
+    			if (detaching) detach_dev(t4);
+    			if (detaching) detach_dev(div3);
     		}
     	};
 
@@ -21102,7 +21133,7 @@ var app = (function () {
     	onMount(async () => {
     		data = await csv('/median_prices.csv');
     		geoJson = await json('/us-states.json');
-    		dateRange = data.columns.slice(5); // Extract the date range
+    		dateRange = data.columns.slice(8); // Extract the date range
     		selectedDate = dateRange[0]; // Default to the first date
     		drawMap();
     		createSlider();
@@ -21113,9 +21144,6 @@ var app = (function () {
     		const projection = albersUsa().scale(1800).translate([width / 2, height / 2]); // Adjusted for expanded map
     		const path = index$2().projection(projection);
 
-    		const colorScale = threshold().domain([0, 100000, 300000, 500000, 750000, 1000000]).range(['#f7fbff', '#deebf7', '#c6dbef', '#9ecae1', '#6baed6', '#084c8d']); // Include $1,000,000
-    		// Use a moderately dark blue for $1,000,000
-
     		geoJson.features.forEach(feature => {
     			const stateData = data.find(d => d.RegionName === feature.properties.NAME);
     			feature.properties.median_price = stateData ? Math.round(+stateData[selectedDate]) : null;
@@ -21123,12 +21151,38 @@ var app = (function () {
 
     		svg.selectAll('path').data(geoJson.features).join('path').attr('d', path).attr('fill', d => d.properties.median_price !== null
     		? colorScale(d.properties.median_price)
-    		: '#ccc').attr('stroke', '#333').attr('stroke-width', 0.5).on('mouseover', (event, d) => {
+    		: '#ccc').attr('stroke', '#333').attr('stroke-width', 0.5).on('mouseover', function (event, d) {
+    			// Highlight the state
+    			select(this).transition().duration(200).attr('fill', '#ffcc00').attr('stroke-width', 2); // Change to a highlight color
+    			// Thicker border
+
+    			// Show tooltip
     			if (d.properties.median_price !== null) {
     				const formattedPrice = d.properties.median_price.toLocaleString();
     				select('#tooltip').style('opacity', 1).html(`${d.properties.NAME}: $${formattedPrice}`).style('left', `${event.pageX + 10}px`).style('top', `${event.pageY + 10}px`);
     			}
-    		}).on('mouseout', () => {
+    		}).on('mouseover', function (event, d) {
+    			if (d.properties.median_price !== null) {
+    				// Brighten the current color slightly
+    				const currentColor = select(this).attr('fill');
+
+    				const brighterColor = color(currentColor).brighter(0.5);
+
+    				select(this).transition().duration(200).attr('fill', brighterColor).attr('stroke-width', 4); // Brighten the current color
+    				// Thicker border
+
+    				// Show tooltip
+    				const formattedPrice = d.properties.median_price.toLocaleString();
+
+    				select('#tooltip').style('opacity', 1).html(`${d.properties.NAME}: $${formattedPrice}`).style('left', `${event.pageX + 10}px`).style('top', `${event.pageY + 10}px`);
+    			}
+    		}).on('mouseout', function (event, d) {
+    			// Reset to the original color
+    			select(this).transition().duration(200).attr('fill', d => d.properties.median_price !== null
+    			? colorScale(d.properties.median_price)
+    			: '#ccc').attr('stroke-width', 0.5);
+
+    			// Hide tooltip
     			select('#tooltip').style('opacity', 0);
     		});
 
@@ -21166,10 +21220,10 @@ var app = (function () {
 
     		gradient.selectAll('stop').data([
     			{ offset: '0%', color: '#f7fbff' },
-    			{ offset: '20%', color: '#deebf7' },
-    			{ offset: '40%', color: '#c6dbef' },
-    			{ offset: '60%', color: '#9ecae1' },
-    			{ offset: '80%', color: '#6baed6' },
+    			{ offset: '12%', color: '#deebf7' },
+    			{ offset: '30%', color: '#c6dbef' },
+    			{ offset: '45%', color: '#9ecae1' },
+    			{ offset: '66.6%', color: '#6baed6' },
     			{ offset: '100%', color: '#041e42' }
     		]).enter().append('stop').attr('offset', d => d.offset).attr('stop-color', d => d.color); // Much darker blue for $1,000,000
 
