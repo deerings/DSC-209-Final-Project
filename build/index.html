@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="./favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="./_app/immutable/assets/2.opPLeOby.css" rel="stylesheet">
+		<link rel="modulepreload" href="./_app/immutable/entry/start.-fhKGbDY.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/entry.U4P5Ztq7.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/scheduler.zMJaRgub.js">
+		<link rel="modulepreload" href="./_app/immutable/entry/app.YWdJm6o7.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/index.nDYtXvIK.js">
+		<link rel="modulepreload" href="./_app/immutable/nodes/0.oHNqoVOo.js">
+		<link rel="modulepreload" href="./_app/immutable/nodes/2.wz2kmcRw.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents">  <div style="text-align: center; margin-bottom: 20px;" data-svelte-h="svelte-dhdpmk"><h1 style="font-size: 28px; font-weight: bold;">U.S Housing Market Insights: Median Prices by State from January 2000 to October 2024</h1></div> <div id="slider" style="margin: 30px;"></div> <svg id="map" class="svelte-ed4w7q"></svg> <div id="tooltip" class="svelte-ed4w7q"></div>  <div style="margin-top: 20px; padding: 10px; line-height: 1.5; max-width: 800px; margin-left: auto; margin-right: auto; text-align: justify; font-size: 20px; color: #333; text-indent: 40px;" data-svelte-h="svelte-9k7csf"><p><strong>Insightful Visualization:</strong> Explore the evolution of U.S. housing market trends with this interactive visualization. Seamlessly hover over each state to reveal its median home price for the selected year. Navigate through two decades of data using the timeline slider and uncover regional trends. The dynamic color gradient highlights price variations, with deeper hues signifying higher housing values, offering a clear, data-driven perspective on the market.</p> </div> 
+			
+			<script>
+				{
+					__sveltekit_vu7nmd = {
+						base: new URL(".", location).pathname.slice(0, -1),
+						assets: "/special-potato"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					const data = [null,null];
+
+					Promise.all([
+						import("./_app/immutable/entry/start.-fhKGbDY.js"),
+						import("./_app/immutable/entry/app.YWdJm6o7.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2],
+							data,
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>
